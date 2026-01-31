@@ -1,188 +1,151 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>EMOTE BOT</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Montserrat;
-}
-
-body{
-    height:100vh;
-    background:linear-gradient(135deg,#0f0c29,#1a1a2e,#16213e);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:white;
-}
-
-.card{
-    width:380px;
-    padding:35px;
-    border-radius:30px;
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(25px);
-    border:1px solid rgba(255,255,255,.2);
-    box-shadow:0 0 40px rgba(0,0,0,.6);
-    text-align:center;
-}
-
-.emote{
-    font-size:90px;
-    animation:float 3s ease-in-out infinite;
-    filter:drop-shadow(0 0 20px #00dbde);
-}
-
-@keyframes float{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-15px)}
-}
-
-h2{margin-top:10px;letter-spacing:2px;}
-p{opacity:.7;margin:10px 0 20px;}
-
-input{
-    width:100%;
-    padding:12px;
-    margin:6px 0;
-    border-radius:12px;
-    background:#0f0c29;
-    color:white;
-    border:1px solid #333;
-}
-
-button{
-    width:100%;
-    margin-top:15px;
-    padding:14px;
-    border:none;
-    border-radius:30px;
-    background:linear-gradient(45deg,#00dbde,#fc00ff);
-    color:white;
-    font-weight:700;
-    font-size:16px;
-    cursor:pointer;
-}
-
-.status{
-    margin-top:12px;
-    font-size:14px;
-    color:#00ffae;
-}
-
-.weapon{
-    margin-top:5px;
-    color:#ffd369;
-    font-weight:600;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>EMOTE BOT - SERVER VN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00f2ff; --bg: #05070a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Lexend', sans-serif; }
+        body {
+            height: 100vh; background-color: var(--bg);
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; position: relative;
+        }
+        #particles-js { position: absolute; width: 100%; height: 100%; z-index: 1; }
+        .container {
+            position: relative; z-index: 10; width: 92%; max-width: 380px;
+            background: rgba(15, 17, 22, 0.98); padding: 30px; border-radius: 25px;
+            border: 2px solid var(--primary); text-align: center;
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.25);
+        }
+        h2 { font-size: 28px; color: #fff; text-transform: uppercase; text-shadow: 0 0 15px var(--primary); margin-bottom: 5px; }
+        .subtitle { color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-bottom: 25px; font-weight: bold; letter-spacing: 1px; }
+        
+        input {
+            width: 100%; padding: 14px; margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 12px; color: white; outline: none; transition: 0.3s; font-size: 14px;
+        }
+        input:focus { border-color: var(--primary); background: rgba(0, 242, 255, 0.05); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
+        
+        .btn-activate {
+            width: 100%; padding: 16px; background: #fff; color: #000;
+            border: none; border-radius: 50px; font-weight: 800; font-size: 15px;
+            cursor: pointer; box-shadow: 0 0 30px var(--primary);
+            text-transform: uppercase; transition: 0.3s; margin-top: 10px;
+        }
+        .btn-activate:hover { transform: scale(1.02); box-shadow: 0 0 45px var(--primary); }
+        
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; }
+        .status-item {
+            background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 12px;
+            font-size: 11px; color: var(--primary); font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+        }
+        
+        .music-toggle {
+            position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px;
+            background: #fff; border-radius: 50%; display: flex;
+            justify-content: center; align-items: center; cursor: pointer;
+            box-shadow: 0 0 20px var(--primary); z-index: 100; font-size: 22px;
+        }
+    </style>
 </head>
-
 <body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <h2>EMOTE BOT</h2>
+        <p class="subtitle">SERVER: VN | MUSIC: AIR REMIX</p>
+        
+        <input id="tc" placeholder="NHẬP TEAM CODE">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <input id="uid1" placeholder="UID 1">
+            <input id="uid2" placeholder="UID 2">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <input id="uid3" placeholder="UID 3">
+            <input id="uid4" placeholder="UID 4">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <input id="uid5" placeholder="UID 5 (Tùy chọn)">
+            <div style="width: 100%;"></div> 
+        </div>
+        
+        <button class="btn-activate" onclick="startRandom()">KÍCH HOẠT BOT</button>
+        
+        <div class="status-grid">
+            <div class="status-item" id="st">TRẠNG THÁI: CHỜ</div>
+            <div class="status-item" id="wp">SÚNG: TRỐNG</div>
+        </div>
+    </div>
 
-<div class="card">
+    <div class="music-toggle" id="mBtn" onclick="toggleMusic()">🎵</div>
+    
+    <audio id="bgMusic" loop autoplay>
+        <source src="https://files.catbox.moe/mmkn6r.mp3" type="audio/mpeg">
+    </audio>
 
-    <div class="emote">🔥</div>
-    <h2>EMOTE BOT</h2>
-    <p>Auto all emote — 3 giây / emote</p>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {"particles":{"number":{"value":60},"color":{"value":"#00f2ff"},"shape":{"type":"circle"},"opacity":{"value":0.4},"size":{"value":2},"line_linked":{"enable":true,"distance":150,"color":"#00f2ff","opacity":0.2,"width":1},"move":{"enable":true,"speed":1.5}}});
+        
+        const emotes = [
+            {id:"909000063", name:"AK"}, {id:"909000068", name:"SCAR"}, {id:"909000075", name:"MP40"},
+            {id:"909040010", name:"MP40 II"}, {id:"909000081", name:"M1014"}, {id:"909039011", name:"M1014 II"},
+            {id:"909000085", name:"XM8"}, {id:"909000090", name:"FAMAS"}, {id:"909000098", name:"UMP"},
+            {id:"909035007", name:"M1887"}, {id:"909042008", name:"Woodpecker"}, {id:"909041005", name:"Groza"},
+            {id:"909033001", name:"M4A1"}, {id:"909038010", name:"Thompson"}, {id:"909038012", name:"G18"},
+            {id:"909045001", name:"Parafal"}, {id:"909049010", name:"P90"}, {id:"909051003", name:"M60"}
+        ];
 
-    <input id="tc" placeholder="Team Code">
+        let index = 0, timer = null, isPlaying = false;
+        const m = document.getElementById("bgMusic");
 
-    <input id="uid1" placeholder="UID 1">
-    <input id="uid2" placeholder="UID 2">
-    <input id="uid3" placeholder="UID 3">
-    <input id="uid4" placeholder="UID 4">
-    <input id="uid5" placeholder="UID 5">
+        document.addEventListener('click', () => { 
+            if(m.paused){ m.play(); isPlaying = true; document.getElementById("mBtn").innerText = "🎵"; } 
+        }, {once: true});
 
-    <button onclick="startRandom()">🎲 RANDOM EMOTE</button>
-
-    <div class="status" id="status"></div>
-    <div class="weapon" id="weapon"></div>
-
-</div>
-
-<script>
-const emotes = [
-    {id:"909000063", name:"AK"},
-    {id:"909000068", name:"SCAR"},
-    {id:"909000075", name:"MP40"},
-    {id:"909040010", name:"MP40 II"},
-    {id:"909000081", name:"M1014"},
-    {id:"909039011", name:"M1014 II"},
-    {id:"909000085", name:"XM8"},
-    {id:"909000090", name:"FAMAS"},
-    {id:"909000098", name:"UMP"},
-    {id:"909035007", name:"M1887"},
-    {id:"909042008", name:"Woodpecker"},
-    {id:"909041005", name:"Groza"},
-    {id:"909033001", name:"M4A1"},
-    {id:"909038010", name:"Thompson"},
-    {id:"909038012", name:"G18"},
-    {id:"909045001", name:"Parafal"},
-    {id:"909049010", name:"P90"},
-    {id:"909051003", name:"M60"}
-];
-
-let index = 0;
-let timer = null;
-
-function startRandom(){
-
-    const tc = document.getElementById("tc").value;
-
-    const uids = [
-        uid1.value,
-        uid2.value,
-        uid3.value,
-        uid4.value,
-        uid5.value
-    ].filter(u => u);
-
-    if(!tc){
-        alert("Nhập team code!");
-        return;
-    }
-
-    index = 0;
-    document.getElementById("status").innerText = "⏳ Đang bật emote...";
-    document.getElementById("weapon").innerText = "";
-
-    timer = setInterval(() => {
-
-        if(index >= emotes.length){
-            clearInterval(timer);
-            document.getElementById("status").innerText = "✅ Đã bật ALL EMOTE";
-            document.getElementById("weapon").innerText = "";
-            return;
+        function toggleMusic() {
+            if(isPlaying) { m.pause(); document.getElementById("mBtn").innerText = "🔇"; } 
+            else { m.play(); document.getElementById("mBtn").innerText = "🎵"; }
+            isPlaying = !isPlaying;
         }
 
-        const e = emotes[index];
-
-        document.getElementById("weapon").innerText =
-            "🔫 Đang chạy: " + e.name;
-
-        uids.forEach(uid => {
-            fetch(
-              `https://sikibid.onrender.com/join?tc=${tc}&uid1=${uid}&emote_id=${e.id}`
-            ).catch(()=>{});
-        });
-
-        document.getElementById("status").innerText =
-            "🔥 Emote ID: " + e.id;
-
-        index++;
-
-    }, 3000); // ⏱ 3 GIÂY
-}
-</script>
-
+        function startRandom(){
+            const tc = document.getElementById("tc").value.trim();
+            const uids = [
+                document.getElementById("uid1").value,
+                document.getElementById("uid2").value,
+                document.getElementById("uid3").value,
+                document.getElementById("uid4").value,
+                document.getElementById("uid5").value
+            ].map(u=>u.trim()).filter(Boolean);
+            
+            if(!tc) return alert("⚠️ Nhập Team Code!");
+            
+            document.getElementById("st").innerText = "ĐANG CHẠY...";
+            index = 0; if(timer) clearInterval(timer);
+            
+            timer = setInterval(() => {
+                if(index >= emotes.length){ 
+                    clearInterval(timer); 
+                    document.getElementById("st").innerText = "HOÀN THÀNH!"; 
+                    document.getElementById("wp").innerText = "XONG 18 SÚNG";
+                    return; 
+                }
+                const e = emotes[index];
+                document.getElementById("wp").innerText = "SÚNG: " + e.name;
+                uids.forEach(uid => {
+                    fetch(`https://siiyfcc.onrender.com/join?tc=${tc}&uid1=${uid}&emote_id=${e.id}`).catch(()=>{});
+                });
+                index++;
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
