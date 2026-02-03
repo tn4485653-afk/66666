@@ -2,14 +2,14 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>EMOTE BOT - TET COUNTDOWN</title>
+    <title>EMOTE BOT - PREMIUM VERSION</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #00f2ff; --accent: #ff007a; --bg: #05070a; --tet: #ff4d4d; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Lexend', sans-serif; }
-        
+
         body {
             height: 100vh; background-color: var(--bg);
             display: flex; justify-content: center; align-items: center;
@@ -18,7 +18,7 @@
 
         #particles-js { position: absolute; width: 100%; height: 100%; z-index: 1; }
 
-        /* --- HIỆU ỨNG MENU LOGIN ĐỘNG --- */
+        /* --- LOGIN SCREEN (GIỮ NGUYÊN GỐC) --- */
         #login-screen {
             position: fixed; inset: 0; z-index: 999;
             background: radial-gradient(circle, rgba(255,77,77,0.1) 0%, rgba(5,7,10,1) 70%);
@@ -35,37 +35,45 @@
             backdrop-filter: blur(10px);
         }
 
-        @keyframes floating {
-            0% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-15px) scale(1.02); }
-            100% { transform: translateY(0px) scale(1); }
+        @keyframes floating { 0% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-15px) scale(1.02); } 100% { transform: translateY(0px) scale(1); } }
+        @keyframes boxGlow { from { border-color: var(--primary); box-shadow: 0 0 20px var(--primary); } to { border-color: var(--tet); box-shadow: 0 0 30px var(--tet); } }
+
+        /* CSS CHO KHUNG ADMIN MỚI */
+        .admin-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            margin-top: 10px;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--primary);
+            background: rgba(0, 242, 255, 0.05);
+            text-transform: uppercase;
         }
 
-        @keyframes boxGlow {
-            from { border-color: var(--primary); box-shadow: 0 0 20px var(--primary); }
-            to { border-color: var(--tet); box-shadow: 0 0 30px var(--tet); }
-        }
-
-        .login-box h2 {
-            font-size: 32px; letter-spacing: 4px; margin-bottom: 10px;
-            background: linear-gradient(to right, #00f2ff, #ff4d4d);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        /* --- UI CHÍNH --- */
+        /* --- DASHBOARD --- */
         .container {
             position: relative; z-index: 10; width: 92%; max-width: 380px;
             background: rgba(15, 17, 22, 0.98); padding: 25px; border-radius: 25px;
             border: 2px solid var(--primary); text-align: center;
             box-shadow: 0 0 40px rgba(0, 242, 255, 0.25);
             display: none;
-            animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.5); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+
+        .mode-btn {
+            width: 100%; height: 60px; padding: 0 20px; margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--primary); border-radius: 15px;
+            color: white; font-weight: 700; font-size: 15px;
+            display: flex; align-items: center; cursor: pointer;
+            transition: 0.2s; text-transform: uppercase;
         }
+        .mode-btn i.icon-left { width: 30px; font-size: 18px; text-align: left; color: var(--primary); }
+        .mode-btn span { flex-grow: 1; text-align: left; margin-left: 10px; }
 
         input, select {
             width: 100%; padding: 12px; margin-bottom: 10px;
@@ -93,14 +101,11 @@
             color: var(--tet); font-weight: bold; font-size: 13px;
         }
 
-        .timer-display { color: var(--accent); font-weight: bold; font-size: 22px; margin-top: 10px; }
-
         .grid-uids { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .status-item {
-            background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 12px;
-            font-size: 11px; color: var(--primary); border: 1px solid rgba(0, 242, 255, 0.2);
-        }
+        .status-item { background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 12px; font-size: 11px; color: var(--primary); border: 1px solid rgba(0, 242, 255, 0.2); }
+
+        .back-link { color: var(--accent); font-size: 12px; cursor: pointer; display: block; margin-bottom: 15px; text-align: left; font-weight: bold; }
 
         .music-toggle {
             position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px;
@@ -121,51 +126,83 @@
             <button class="btn-activate" onclick="login()">KÍCH HOẠT MENU</button>
             <a href="https://discord.gg/cnNTFg6bNz" target="_blank" class="discord-btn"><i class="fab fa-discord"></i> DISCORD</a>
             <div style="font-size: 11px; color: #aaa;">KEY CÒN LẠI:</div>
-            <div class="timer-display" id="time-login">24:00:00</div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div id="time-login" style="color: var(--accent); font-weight: bold; font-size: 22px;">24:00:00</div>
+                <div class="admin-tag">Admin website SiKiBiDi ExE</div>
+            </div>
         </div>
     </div>
 
-    <div class="container" id="main-menu">
-        <h2 id="server-title">VIETNAM SERVER</h2>
-        <div class="tet-countdown" id="tet-main">🧧 CÒN 14 NGÀY NỮA ĐẾN TẾT</div>
+    <div class="container" id="dashboard">
+        <h2 style="margin-bottom: 20px; color: var(--primary);">SELECT MODE</h2>
+        <button class="mode-btn" onclick="openTool('tcp-ui')">
+            <i class="fas fa-network-wired icon-left"></i><span>TCP MENU</span><i class="fas fa-chevron-right"></i>
+        </button>
+        <button class="mode-btn" onclick="openTool('emote-ui')">
+            <i class="fas fa-smile icon-left"></i><span>EMOTE MENU</span><i class="fas fa-chevron-right"></i>
+        </button>
+        <button class="mode-btn" onclick="openTool('team5-ui')">
+            <i class="fas fa-users icon-left"></i><span>TEAM 5 MENU</span><i class="fas fa-chevron-right"></i>
+        </button>
+        <button class="mode-btn" onclick="openTool('lag-ui')">
+            <i class="fas fa-bolt icon-left"></i><span>LAG MENU</span><i class="fas fa-chevron-right"></i>
+        </button>
+        <button class="mode-btn" onclick="location.reload()" style="border-color: #ff4d4d; color: #ff4d4d; margin-top: 10px;">
+            <i class="fas fa-sign-out-alt icon-left"></i><span>ĐĂNG XUẤT</span>
+        </button>
+    </div>
 
+    <div class="container" id="emote-ui">
+        <span class="back-link" onclick="backToDashboard()"><i class="fas fa-arrow-left"></i> TRỞ VỀ</span>
+        <h2 id="server-title">VIETNAM SERVER</h2>
+        <div class="tet-countdown" id="tet-main">🧧 CÒN 14 NGÀY NỮA ĐẾT TẾT</div>
         <select id="serverSelect" onchange="updateServer()">
             <option value="VN">Server Việt Nam (VN)</option>
             <option value="IN">Server India (IND)</option>
             <option value="ID">Server Indonesia (INDO)</option>
             <option value="NA">Server North America (NA)</option>
         </select>
-
-        <div style="text-align: left; margin-bottom: 5px;"><label style="font-size: 10px; color: var(--primary);">DANH SÁCH NHẠC:</label></div>
         <select id="musicSelect" onchange="changeMusic()">
             <option value="https://files.catbox.moe/mmkn6r.mp3">🔥 Air Remix </option>
-            <option value="https://files.catbox.moe/9nodnl.mp3">🎵 Nhạc </option>
-            <option value="https://files.catbox.moe/3ul309.mp3">🎵 Nhạc </option>
-            <option value="https://files.catbox.moe/lfbb17.mp3">🎵 Nhạc  </option>
-            <option value="https://files.catbox.moe/jdoqf4.mp3">🎵 Nhạc  </option>
-            
+            <option value="https://files.catbox.moe/9nodnl.mp3">🎵 Nhạc 2</option>
+            <option value="https://files.catbox.moe/3ul309.mp3">🎵 Nhạc 3</option>
+            <option value="https://files.catbox.moe/lfbb17.mp3">🎵 Nhạc 4</option>
+            <option value="https://files.catbox.moe/jdoqf4.mp3">🎵 Nhạc 5</option>
         </select>
-
         <input id="tc" placeholder="NHẬP TEAM CODE">
         <div class="grid-uids">
             <input id="uid1" placeholder="UID 1">
             <input id="uid2" placeholder="UID 2">
-        </div>
-        <div class="grid-uids">
             <input id="uid3" placeholder="UID 3">
             <input id="uid4" placeholder="UID 4">
         </div>
-        <div class="grid-uids">
-            <input id="uid5" placeholder="UID 5" style="grid-column: span 2;">
-        </div>
-
+        <input id="uid5" placeholder="UID 5" style="width: 100%;">
         <button class="btn-activate" onclick="startRandom()">BẮT ĐẦU BOT</button>
-
         <div class="status-grid">
             <div class="status-item" id="st">CHỜ...</div>
             <div class="status-item" id="wp">SÚNG: TRỐNG</div>
         </div>
-        <div id="time-main" style="margin-top: 15px; font-size: 12px; color: #ff007a; font-weight: bold;">KEY: 24:00:00</div>
+        <div id="time-main" style="margin-top: 15px; font-size: 12px; color: #ff007a; font-weight: bold;">KEY CÒN LẠI: 24:00:00</div>
+    </div>
+
+    <div class="container" id="tcp-ui">
+        <span class="back-link" onclick="backToDashboard()"><i class="fas fa-arrow-left"></i> TRỞ VỀ</span>
+        <h2>TCP MENU</h2>
+        <input placeholder="NHẬP IP/PORT">
+        <button class="btn-activate">KÍCH HOẠT TCP</button>
+    </div>
+    <div class="container" id="team5-ui">
+        <span class="back-link" onclick="backToDashboard()"><i class="fas fa-arrow-left"></i> TRỞ VỀ</span>
+        <h2>TEAM 5 MENU</h2>
+        <input placeholder="ID PHÒNG">
+        <button class="btn-activate">AUTO TEAM 5</button>
+    </div>
+    <div class="container" id="lag-ui">
+        <span class="back-link" onclick="backToDashboard()"><i class="fas fa-arrow-left"></i> TRỞ VỀ</span>
+        <h2>LAG MENU</h2>
+        <input placeholder="TOKEN LAG">
+        <button class="btn-activate">BẮT ĐẦU LAG</button>
     </div>
 
     <div class="music-toggle" onclick="toggleMusic()" id="mBtn">🎵</div>
@@ -175,76 +212,59 @@
     <script>
         particlesJS("particles-js", {"particles":{"number":{"value":60},"color":{"value":"#00f2ff"},"shape":{"type":"circle"},"opacity":{"value":0.4},"size":{"value":2},"line_linked":{"enable":true,"distance":150,"color":"#00f2ff","opacity":0.2,"width":1},"move":{"enable":true,"speed":1.5}}});
 
-        // QUẢN LÝ ĐẾM NGƯỢC TẾT (14 NGÀY)
         const TET_KEY = "tet_countdown_time";
         function initTetTimer() {
-            let tetExpiry = localStorage.getItem(TET_KEY);
-            if (!tetExpiry) {
-                tetExpiry = Date.now() + (14 * 24 * 60 * 60 * 1000); 
-                localStorage.setItem(TET_KEY, tetExpiry);
-            }
+            let tetExpiry = localStorage.getItem(TET_KEY) || (Date.now() + (14 * 24 * 60 * 60 * 1000));
+            localStorage.setItem(TET_KEY, tetExpiry);
             setInterval(() => {
                 let diff = tetExpiry - Date.now();
-                let display = "";
-                if (diff <= 0) { display = "🧧 CHÚC MỪNG NĂM MỚI! 🧧"; } 
-                else {
-                    let d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    let h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    let m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    let s = Math.floor((diff % (1000 * 60)) / 1000);
-                    display = `🧧 CÒN ${d}N ${h}H ${m}P ${s}S ĐẾN TẾT`;
-                }
+                let d = Math.floor(diff / (1000 * 60 * 60 * 24)), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+                let display = diff <= 0 ? "🧧 CHÚC MỪNG NĂM MỚI! 🧧" : `🧧 CÒN ${d}N ${h}H ${m}P ${s}S ĐẾN TẾT`;
                 document.getElementById("tet-login").innerText = display;
-                document.getElementById("tet-main").innerText = display;
+                if(document.getElementById("tet-main")) document.getElementById("tet-main").innerText = display;
             }, 1000);
         }
         initTetTimer();
 
-        // QUẢN LÝ KEY 24H
         const EXPIRY_KEY = "emote_bot_expiry_timestamp";
         function startTimer() {
-            let expiry = localStorage.getItem(EXPIRY_KEY);
-            if (!expiry) { expiry = Date.now() + (24 * 60 * 60 * 1000); localStorage.setItem(EXPIRY_KEY, expiry); }
+            let expiry = localStorage.getItem(EXPIRY_KEY) || (Date.now() + 86400000);
+            localStorage.setItem(EXPIRY_KEY, expiry);
             setInterval(() => {
                 let diff = expiry - Date.now();
-                if (diff <= 0) { document.getElementById("time-login").innerText = "HẾT HẠN!"; return; }
-                let h = Math.floor(diff / 3600000).toString().padStart(2,'0');
-                let m = Math.floor((diff % 3600000) / 60000).toString().padStart(2,'0');
-                let s = Math.floor((diff % 60000) / 1000).toString().padStart(2,'0');
-                let format = `${h}:${m}:${s}`;
+                let h = Math.floor(diff / 3600000).toString().padStart(2,'0'), m = Math.floor((diff % 3600000) / 60000).toString().padStart(2,'0'), s = Math.floor((diff % 60000) / 1000).toString().padStart(2,'0');
+                let format = diff <= 0 ? "HẾT HẠN!" : `${h}:${m}:${s}`;
                 document.getElementById("time-login").innerText = format;
-                document.getElementById("time-main").innerText = "KEY CÒN LẠI: " + format;
+                if(document.getElementById("time-main")) document.getElementById("time-main").innerText = "KEY CÒN LẠI: " + format;
             }, 1000);
         }
         startTimer();
 
-        const audio = document.getElementById("bgMusic");
-        let isPlaying = false;
         function login() {
             if(document.getElementById("passInput").value === "123") {
                 document.getElementById("login-screen").style.display = "none";
-                document.getElementById("main-menu").style.display = "block";
+                document.getElementById("dashboard").style.display = "block";
                 if(!isPlaying) toggleMusic();
             } else { alert("Mật khẩu sai!"); }
         }
-        function changeMusic() { audio.src = document.getElementById("musicSelect").value; if(isPlaying) audio.play(); }
+        function openTool(id) { document.getElementById("dashboard").style.display = "none"; document.getElementById(id).style.display = "block"; }
+        function backToDashboard() { 
+            ['tcp-ui', 'emote-ui', 'team5-ui', 'lag-ui'].forEach(id => document.getElementById(id).style.display = "none");
+            document.getElementById("dashboard").style.display = "block"; 
+        }
+
+        const audio = document.getElementById("bgMusic");
+        let isPlaying = false;
         function toggleMusic() {
             if(!audio.src) audio.src = document.getElementById("musicSelect").value;
             if(isPlaying) { audio.pause(); document.getElementById("mBtn").innerText = "🔇"; } 
             else { audio.play(); document.getElementById("mBtn").innerText = "🎵"; }
             isPlaying = !isPlaying;
         }
+        function changeMusic() { audio.src = document.getElementById("musicSelect").value; if(isPlaying) audio.play(); }
         function updateServer() { document.getElementById("server-title").innerText = document.getElementById("serverSelect").options[document.getElementById("serverSelect").selectedIndex].text.toUpperCase(); }
 
-        // DANH SÁCH EMOTE ĐÃ CẬP NHẬT
-        const emotes = [
-            {id:"909000063", name:"AK RỒNG"}, {id:"909000068", name:"SCAR MẬP"}, 
-            {id:"909000075", name:"MP40 XÀ"}, {id:"909000081", name:"M1014 LONG"}, 
-            {id:"909000085", name:"XM8 LÔI"}, {id:"909000090", name:"FAMAS DẠ"},
-            {id:"909000098", name:"UMP MÃNG"}, {id:"909035007", name:"M1887"}, 
-            {id:"909033001", name:"M4A1 HỎA"}
-        ];
-
+        const emotes = [{id:"909000063", name:"AK RỒNG"}, {id:"909000068", name:"SCAR MẬP"}, {id:"909000075", name:"MP40 XÀ"}, {id:"909000081", name:"M1014 LONG"}];
         function startRandom() {
             const tc = document.getElementById("tc").value;
             const uids = [1,2,3,4,5].map(i => document.getElementById("uid"+i).value.trim()).filter(Boolean);
@@ -253,9 +273,8 @@
             let i = 0;
             const loop = setInterval(() => {
                 if(i >= emotes.length) { clearInterval(loop); document.getElementById("st").innerText = "XONG!"; return; }
-                const e = emotes[i]; // Đã sửa lỗi biến e
-                document.getElementById("wp").innerText = "SÚNG: " + e.name;
-                uids.forEach(u => fetch(`https://siiyfcc.onrender.com/join?tc=${tc}&uid1=${u}&emote_id=${e.id}`).catch(()=>{}));
+                document.getElementById("wp").innerText = "SÚNG: " + emotes[i].name;
+                uids.forEach(u => fetch(`https://siiyfcc.onrender.com/join?tc=${tc}&uid1=${u}&emote_id=${emotes[i].id}`).catch(()=>{}));
                 i++;
             }, 3000);
         }
