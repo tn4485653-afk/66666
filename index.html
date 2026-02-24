@@ -328,4 +328,86 @@
         function renderUserUI(name, avatar) {
             document.getElementById('userContainer').innerHTML = `
                 <div class="flex items-center gap-3 bg-white/5 px-4 py-1 rounded-full border border-cyan-500/30">
+<span class="text-sm font-gaming hologram-name uppercase tracking-tighter">${name}</span>
+                    <img src="${avatar}" class="w-8 h-8 rounded-full border border-cyan-400 shadow-[0_0_10px_#45f3ff] object-cover">
+                    <button onclick="logout()" class="ml-2 text-gray-500 hover:text-red-500 transition-colors">
+                        <i class="fa-solid fa-power-off text-[10px]"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        // Hàm Đăng xuất - Xóa sạch dữ liệu đã lưu
+        function logout() {
+            if(confirm('Bạn có muốn đăng xuất và xóa thông tin không?')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        function orderNow(name, price, isFree) {
+            const modalTitle = document.getElementById('modalTitle');
+            const pPrice = document.getElementById('productPrice');
+            const mainBtn = document.getElementById('mainBtn');
+            const productName = document.getElementById('productName');
+            
+            productName.innerText = "📦 " + name;
+            pPrice.innerText = price;
+            
+            if(isFree) {
+                modalTitle.innerText = "KÍCH HOẠT MIỄN PHÍ";
+                pPrice.className = "text-3xl font-bold italic text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.4)]";
+                mainBtn.innerText = "Xác nhận kích hoạt";
+                mainBtn.className = "w-full py-5 bg-green-600 hover:bg-green-700 rounded-2xl font-bold btn-click transition shadow-xl uppercase";
+            } else {
+                modalTitle.innerText = "XÁC NHẬN MUA HÀNG";
+                pPrice.className = "text-3xl font-bold italic text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]";
+                mainBtn.innerText = "Thanh toán ngay";
+                mainBtn.className = "w-full py-5 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold btn-click transition shadow-xl uppercase";
+            }
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+        
+        function closeModal() { 
+            document.getElementById('paymentModal').classList.add('hidden'); 
+        }
+        
+        function processOrder() {
+            const uidField = document.getElementById('uidField');
+            const uid = uidField.value;
+            
+            if(!uid || uid.length < 5) {
+                alert('⚠️ Vui lòng nhập đúng UID Game của bạn!');
+                uidField.focus();
+                return;
+            }
+
+            const mainBtn = document.getElementById('mainBtn');
+            const originalText = mainBtn.innerText;
+            
+            // Hiệu ứng giả lập đang xử lý
+            mainBtn.innerText = "⌛ ĐANG KẾT NỐI MÁY CHỦ...";
+            mainBtn.disabled = true;
+            mainBtn.style.opacity = "0.7";
+
+            setTimeout(() => {
+                alert('✅ Thành công! Hệ thống đã ghi nhận UID: ' + uid + '\nVật phẩm/Tiện ích sẽ được gửi vào hộp thư sau 30 giây.');
+                mainBtn.innerText = originalText;
+                mainBtn.disabled = false;
+                mainBtn.style.opacity = "1";
+                closeModal();
+            }, 2500);
+        }
+
+        // Đóng modal khi click ra ngoài vùng xám
+        window.onclick = function(event) {
+            const loginModal = document.getElementById('loginModal');
+            const paymentModal = document.getElementById('paymentModal');
+            if (event.target == loginModal) toggleLoginModal(false);
+            if (event.target == paymentModal) closeModal();
+        }
+    </script>
+</body>
+</html>
+
                  
