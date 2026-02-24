@@ -2,305 +2,330 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>EMOTE BOT - PREMIUM VERSION</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>FF Store - Thẻ Đổi Tên & Tiện Ích Free</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --primary: #00f2ff; --accent: #ff007a; --bg: #05070a; --tet: #ff4d4d; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Lexend', sans-serif; }
+        body { font-family: 'Roboto', sans-serif; background-color: #0b0e14; color: white; scroll-behavior: smooth; }
+        .font-gaming { font-family: 'Tektur', sans-serif; }
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .hero-banner {
+            background-image: linear-gradient(rgba(11, 14, 20, 0.6), rgba(11, 14, 20, 0.8)), 
+                              url('https://sf-static.upanhlaylink.com/img/image_20260224dbbf4f2511254feed8ed3623c512a9ec.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .item-glow {
+            filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.5));
+            transition: all 0.5s ease;
+        }
+        .card-glow:hover .item-glow {
+            filter: drop-shadow(0 0 25px rgba(234, 179, 8, 0.8));
+            transform: scale(1.05) rotate(2deg);
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-8px);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #9333ea, #3b82f6);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+        .btn-click:active { transform: scale(0.95); }
+        .dropdown:hover .dropdown-menu { display: block; }
 
-        body {
-            height: 100vh; background-color: var(--bg);
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden; position: relative; color: white;
+        /* --- ANIMATED BORDER LOGIN FORM --- */
+        .login-card {
+            position: relative;
+            width: 420px;
+            background: #1c1f25;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 420px;
+            height: 550px;
+            background: linear-gradient(0deg, transparent, #45f3ff, #45f3ff);
+            transform-origin: bottom right;
+            animation: animate 6s linear infinite;
+        }
+        .login-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 420px;
+            height: 550px;
+            background: linear-gradient(0deg, transparent, #ff2770, #ff2770);
+            transform-origin: bottom right;
+            animation: animate 6s linear infinite;
+            animation-delay: -3s;
+        }
+        @keyframes animate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .login-content {
+            position: absolute;
+            inset: 4px;
+            background: #1c1f25;
+            border-radius: 20px;
+            z-index: 10;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
         }
 
-        #particles-js { position: absolute; width: 100%; height: 100%; z-index: 1; }
-
-        /* --- LOGIN SCREEN --- */
-        #login-screen {
-            position: fixed; inset: 0; z-index: 999;
-            background: radial-gradient(circle, rgba(255,77,77,0.1) 0%, rgba(5,7,10,1) 70%);
-            display: flex; justify-content: center; align-items: center;
+        /* --- AVATAR & HOLOGRAM NAME STYLE --- */
+        .avatar-option {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            filter: grayscale(0.5);
+        }
+        .avatar-option:hover { transform: scale(1.1); filter: grayscale(0); }
+        .avatar-selected {
+            border-color: #45f3ff;
+            filter: grayscale(0);
+            box-shadow: 0 0 15px #45f3ff;
+            animation: hologram-pulse 1.5s infinite alternate;
+        }
+        @keyframes hologram-pulse {
+            from { box-shadow: 0 0 5px #45f3ff; }
+            to { box-shadow: 0 0 20px #ff2770; }
         }
 
-        .login-box {
-            width: 90%; max-width: 380px; padding: 40px 30px;
-            background: rgba(15, 17, 22, 0.9);
-            border: 2px solid var(--primary); border-radius: 30px;
-            text-align: center;
-            box-shadow: 0 0 30px var(--primary), inset 0 0 15px rgba(0, 242, 255, 0.2);
-            animation: floating 4s ease-in-out infinite, boxGlow 2s infinite alternate;
-            backdrop-filter: blur(10px);
+        .hologram-name {
+            background: linear-gradient(90deg, #45f3ff, #ff2770, #45f3ff, #ff2770);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: hologram-text 4s linear infinite;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(69, 243, 255, 0.3);
         }
-
-        @keyframes floating { 0% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-15px) scale(1.02); } 100% { transform: translateY(0px) scale(1); } }
-        @keyframes boxGlow { from { border-color: var(--primary); box-shadow: 0 0 20px var(--primary); } to { border-color: var(--tet); box-shadow: 0 0 30px var(--tet); } }
-
-        .admin-tag {
-            display: inline-block; padding: 4px 10px; margin-top: 10px;
-            border: 1px solid var(--primary); border-radius: 8px;
-            font-size: 10px; font-weight: bold; color: var(--primary);
-            background: rgba(0, 242, 255, 0.05); text-transform: uppercase;
-        }
-
-        /* --- DASHBOARD --- */
-        .container {
-            position: relative; z-index: 10; width: 92%; max-width: 380px;
-            background: rgba(15, 17, 22, 0.98); padding: 25px; border-radius: 25px;
-            border: 2px solid var(--primary); text-align: center;
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.25);
-            display: none;
-            animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes zoomIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
-
-        .mode-btn {
-            width: 100%; height: 60px; padding: 0 20px; margin-bottom: 12px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--primary); border-radius: 15px;
-            color: white; font-weight: 700; font-size: 15px;
-            display: flex; align-items: center; cursor: pointer;
-            transition: 0.2s; text-transform: uppercase;
-        }
-        .mode-btn i.icon-left { width: 30px; font-size: 18px; text-align: left; color: var(--primary); }
-        .mode-btn span { flex-grow: 1; text-align: left; margin-left: 10px; }
-
-        input, select {
-            width: 100%; padding: 12px; margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 242, 255, 0.3);
-            border-radius: 12px; color: white; outline: none; font-size: 14px;
-        }
-
-        .btn-activate {
-            width: 100%; padding: 15px; background: #fff; color: #000;
-            border: none; border-radius: 50px; font-weight: 800;
-            cursor: pointer; box-shadow: 0 0 25px var(--primary);
-            text-transform: uppercase; margin-top: 10px;
-        }
-
-        .discord-btn {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            background: #5865F2; color: white; padding: 12px;
-            border-radius: 15px; text-decoration: none; font-weight: bold;
-            margin: 15px 0; font-size: 14px;
-        }
-
-        .tet-countdown {
-            background: rgba(255, 77, 77, 0.1); border: 1px dashed var(--tet);
-            padding: 10px; border-radius: 15px; margin-bottom: 15px;
-            color: var(--tet); font-weight: bold; font-size: 13px;
-        }
-
-        .grid-uids { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .status-item { background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 12px; font-size: 11px; color: var(--primary); border: 1px solid rgba(0, 242, 255, 0.2); }
-
-        .back-link { color: var(--accent); font-size: 12px; cursor: pointer; display: block; margin-bottom: 15px; text-align: left; font-weight: bold; }
-
-        .music-toggle {
-            position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px;
-            background: #fff; border-radius: 50%; display: flex;
-            justify-content: center; align-items: center; cursor: pointer;
-            box-shadow: 0 0 20px var(--primary); z-index: 100; color: #000;
+        @keyframes hologram-text {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
     </style>
 </head>
-<body>
-    <div id="particles-js"></div>
+<body class="overflow-x-hidden">
 
-    <div id="login-screen">
-        <div class="login-box">
-            <h2>LOGIN BOT</h2>
-            <div class="tet-countdown" id="tet-login">ĐANG TÍNH NGÀY TẾT...</div>
-            <input type="password" id="passInput" placeholder="NHẬP MẬT KHẨU" style="text-align: center;">
-            <button class="btn-activate" onclick="login()">KÍCH HOẠT MENU</button>
-            <a href="https://discord.gg/cnNTFg6bNz" target="_blank" class="discord-btn"><i class="fab fa-discord"></i> DISCORD</a>
-            <div style="font-size: 11px; color: #aaa;">KEY CÒN LẠI:</div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
-                <div id="time-login" style="color: var(--accent); font-weight: bold; font-size: 22px;">24:00:00</div>
-                <div class="admin-tag">Admin website SiKiBiDi ExE</div>
+    <nav class="fixed w-full z-[100] bg-[#0f172a] px-8 py-4 flex justify-between items-center border-b border-white/5 shadow-2xl">
+        <div class="flex items-center space-x-10">
+            <div class="text-xl font-bold font-gaming gradient-text tracking-widest mr-4">FF STORE</div> 
+            <div class="hidden md:flex space-x-8 font-medium text-sm tracking-wide items-center">
+                <a href="#" class="text-gray-300 hover:text-white transition">Trang Chủ</a>
+                <a href="#products" class="text-gray-300 hover:text-white transition">Sản Phẩm</a>
+                <a href="#" onclick="requireLogin(event)" class="text-gray-300 hover:text-white transition">Nạp Tiền</a>
+                <div class="relative dropdown">
+                    <button class="text-gray-300 hover:text-white transition flex items-center gap-1 uppercase text-[12px] font-bold">
+                        Tiện Ích Miễn Phí <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </button>
+                    <div class="dropdown-menu hidden absolute left-0 mt-2 w-56 glass-morphism rounded-xl overflow-hidden shadow-xl border border-white/10">
+                        <a href="#free-features" class="block px-4 py-3 text-sm text-gray-300 hover:bg-green-600 hover:text-white transition border-b border-white/5">Lag / Team 5 / TCP</a>
+                        <a href="#free-features" class="block px-4 py-3 text-sm text-gray-300 hover:bg-green-600 hover:text-white transition">Emote / Buff LV / Like</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="userContainer" class="flex items-center gap-4">
+            <button id="navLoginBtn" onclick="toggleLoginModal(true)" class="bg-[#1d4ed8] hover:bg-blue-700 text-white px-7 py-2 rounded-xl font-bold text-xs uppercase tracking-wider btn-click transition shadow-lg">
+                LOGIN
+            </button>
+        </div>
+    </nav>
+
+    <section class="relative h-[60vh] flex items-center justify-center text-center px-4 overflow-hidden pt-20 hero-banner">
+        <div class="relative z-10">
+            <h1 class="text-5xl md:text-7xl font-bold font-gaming mb-4 uppercase italic drop-shadow-lg">FF <span class="gradient-text">STORE</span></h1>
+            <p class="text-gray-200 max-w-xl mx-auto italic font-bold drop-shadow-md">Chuyên cung cấp Thẻ Đổi Tên & Hỗ trợ công cụ Game miễn phí</p>
+        </div>
+    </section>
+
+    <section id="products" class="py-16 px-6 max-w-7xl mx-auto">
+        <div class="flex items-center mb-10 border-l-4 border-blue-500 pl-4">
+            <h2 class="text-3xl font-gaming font-bold uppercase tracking-wider">MUA THẺ ĐỔI TÊN</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="glass-morphism p-6 rounded-[2rem] card-glow text-center flex flex-col items-center border border-white/5">
+                <img src="https://sf-static.upanhlaylink.com/img/image_20260224381861e809354db545de63c86f2389b9.jpg" class="w-full rounded-2xl mb-6 item-glow">
+                <h3 class="text-xl font-bold mb-2 font-gaming italic uppercase">Gói x1 Thẻ</h3>
+                <div class="text-2xl font-bold text-yellow-400 mb-6 italic">19.000đ</div>
+                <button onclick="handleAction('Thẻ Đổi Tên x1', '19.000đ', false)" class="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-sm uppercase">Mua Ngay</button>
+            </div>
+            <div class="glass-morphism p-6 rounded-[2rem] card-glow text-center flex flex-col items-center relative group border-2 border-blue-500/50">
+                <div class="absolute -top-3 bg-red-600 px-4 py-1 rounded-full text-[10px] font-bold animate-pulse uppercase">Hot Sell</div>
+                <img src="https://sf-static.upanhlaylink.com/img/image_20260224381861e809354db545de63c86f2389b9.jpg" class="w-full rounded-2xl mb-6 item-glow">
+                <h3 class="text-xl font-bold mb-2 font-gaming italic uppercase text-blue-400">Combo x3 Thẻ</h3>
+                <div class="text-2xl font-bold text-yellow-400 mb-6 italic">50.000đ</div>
+                <button onclick="handleAction('Combo x3 Thẻ', '50.000đ', false)" class="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl font-bold text-sm uppercase">Mua Ngay</button>
+            </div>
+            <div class="glass-morphism p-6 rounded-[2rem] card-glow text-center flex flex-col items-center relative group border border-white/5">
+                <img src="https://sf-static.upanhlaylink.com/img/image_20260224381861e809354db545de63c86f2389b9.jpg" class="w-full rounded-2xl mb-6 item-glow opacity-80">
+                <h3 class="text-xl font-bold mb-2 font-gaming italic uppercase">Gói Sỉ x10</h3>
+                <div class="text-2xl font-bold text-yellow-400 mb-6 italic">150.000đ</div>
+                <button onclick="handleAction('Gói Sỉ x10 Thẻ', '150.000đ', false)" class="w-full py-4 bg-white/10 hover:bg-blue-600 rounded-2xl font-bold text-sm uppercase">Mua Ngay</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="free-features" class="py-16 px-6 max-w-7xl mx-auto bg-white/5 rounded-[3rem] mb-20">
+        <div class="flex items-center justify-center flex-col mb-12 text-center text-4xl font-gaming font-bold uppercase tracking-wider">
+            TIỆN ÍCH MIỄN PHÍ
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-morphism p-8 rounded-3xl card-glow border border-green-500/10 text-center">
+                <div class="text-4xl text-green-500 mb-4"><i class="fa-solid fa-bolt-lightning"></i></div>
+                <h4 class="font-gaming font-bold text-lg mb-1 uppercase">Dịch vụ Lag</h4>
+                <div class="text-xl font-bold text-green-400 mb-6 uppercase">FREE 0đ</div>
+                <button onclick="handleAction('Dịch vụ Lag', '0đ', true)" class="w-full py-3 bg-green-600/20 hover:bg-green-600 rounded-xl font-bold text-xs uppercase">Kích hoạt</button>
+            </div>
+            <div class="glass-morphism p-8 rounded-3xl card-glow border border-green-500/10 text-center">
+                <div class="text-4xl text-green-500 mb-4"><i class="fa-solid fa-thumbs-up"></i></div>
+                <h4 class="font-gaming font-bold text-lg mb-1 uppercase">Tăng Like</h4>
+                <div class="text-xl font-bold text-green-400 mb-6 uppercase">FREE 0đ</div>
+                <button onclick="handleAction('Tăng Like', '0đ', true)" class="w-full py-3 bg-green-600/20 hover:bg-green-600 rounded-xl font-bold text-xs uppercase">Tăng like</button>
+            </div>
+            <div class="glass-morphism p-8 rounded-3xl card-glow border border-green-500/10 text-center">
+                <div class="text-4xl text-green-500 mb-4"><i class="fa-solid fa-masks-theater"></i></div>
+                <h4 class="font-gaming font-bold text-lg mb-1 uppercase">Mở khóa Emote</h4>
+                <div class="text-xl font-bold text-green-400 mb-6 uppercase">FREE 0đ</div>
+                <button onclick="handleAction('Mở khóa Emote', '0đ', true)" class="w-full py-3 bg-green-600/20 hover:bg-green-600 rounded-xl font-bold text-xs uppercase">Nhận ngay</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#0f172a] border-t border-white/5 pt-16 pb-8 px-6">
+        <div class="max-w-7xl mx-auto text-center md:text-left">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="text-2xl font-bold font-gaming gradient-text tracking-widest mb-6">FF STORE</div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Cung cấp giải pháp Gaming an toàn và uy tín.</p>
+                    <div class="flex justify-center md:justify-start space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-blue-600 transition border border-white/10"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-red-600 transition border border-white/10"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-black transition border border-white/10"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-gaming font-bold uppercase text-sm mb-6 text-blue-400">Sản phẩm</h4>
+                    <ul class="space-y-4 text-sm text-gray-400"><li>Thẻ Đổi Tên</li><li>Combo Thẻ</li><li>Gói Sỉ</li></ul>
+                </div>
+                <div>
+                    <h4 class="font-gaming font-bold uppercase text-sm mb-6 text-blue-400">Tiện ích</h4>
+                    <ul class="space-y-4 text-sm text-gray-400"><li>Lag Game</li><li>Tăng Like</li><li>Buff LV</li></ul>
+                </div>
+                <div>
+                    <h4 class="font-gaming font-bold uppercase text-sm mb-6 text-blue-400">Liên hệ</h4>
+                    <p class="text-sm text-gray-400">support@ffstore.vn<br>1900 8888</p>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 text-center">
+                <p class="text-gray-500 text-[10px] uppercase tracking-[3px]">© 2026 FFSTORE. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="fixed inset-0 bg-black/90 hidden z-[300] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="login-card h-[540px]">
+            <div class="login-content">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-gaming font-bold text-white uppercase tracking-wider">Login</h2>
+                    <button onclick="toggleLoginModal(false)" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-3 text-center">Chọn Avatar của bạn</p>
+                <div class="flex flex-wrap gap-3 mb-8 justify-center">
+                    <img src="https://sf-static.upanhlaylink.com/img/image_20260224f8019b2d7ffcb02d714e5719d6731678.jpg" class="avatar-option" onclick="selectAvatar(this)">
+                    <img src="https://sf-static.upanhlaylink.com/img/image_202602242ab7592be53081268757a64e2f0ed8ff.jpg" class="avatar-option" onclick="selectAvatar(this)">
+                    <img src="https://sf-static.upanhlaylink.com/img/image_2026022462f654166b79b62849d07db891fc112a.jpg" class="avatar-option" onclick="selectAvatar(this)">
+                    <img src="https://sf-static.upanhlaylink.com/img/image_20260224f5eafee7e7a2dfb38ea390975310cc64.jpg" class="avatar-option" onclick="selectAvatar(this)">
+                    <img src="https://sf-static.upanhlaylink.com/img/image_20260224de2b5328811b0f60f895933eeb70afbc.jpg" class="avatar-option" onclick="selectAvatar(this)">
+                    <img src="https://sf-static.upanhlaylink.com/img/image_202602249b40c50fa1797bce5b828194f3f48d54.jpg" class="avatar-option" onclick="selectAvatar(this)">
+                    <img src="https://sf-static.upanhlaylink.com/img/image_20260224f91770579e08a4e48d4f41d00deeaf24.jpg" class="avatar-option" onclick="selectAvatar(this)">
+                </div>
+                <form onsubmit="doLogin(event)" class="space-y-4">
+                    <input type="text" id="usernameInput" required placeholder="Tên hiển thị..." class="w-full bg-transparent border-b border-gray-600 py-2 focus:outline-none focus:border-cyan-400 transition text-white text-sm">
+                    <input type="password" required placeholder="Mật khẩu" class="w-full bg-transparent border-b border-gray-600 py-2 focus:outline-none focus:border-pink-500 transition text-white text-sm">
+                    <button type="submit" class="w-full py-4 bg-cyan-500 rounded-xl font-bold uppercase text-xs">Sign In</button>
+                </form>
             </div>
         </div>
     </div>
 
-    <div class="container" id="dashboard">
-        <h2 style="margin-bottom: 20px; color: var(--primary);">SELECT MODE</h2>
-        <button class="mode-btn" onclick="openTool('tcp-ui')">
-            <i class="fas fa-network-wired icon-left"></i><span>TCP MENU</span><i class="fas fa-chevron-right"></i>
-        </button>
-        <button class="mode-btn" onclick="openTool('emote-ui')">
-            <i class="fas fa-smile icon-left"></i><span>EMOTE MENU</span><i class="fas fa-chevron-right"></i>
-        </button>
-        <button class="mode-btn" onclick="openTool('team5-ui')">
-            <i class="fas fa-users icon-left"></i><span>TEAM 5 MENU</span><i class="fas fa-chevron-right"></i>
-        </button>
-        <button class="mode-btn" onclick="openTool('lag-ui')">
-            <i class="fas fa-bolt icon-left"></i><span>LAG MENU</span><i class="fas fa-chevron-right"></i>
-        </button>
-        <button class="mode-btn" onclick="location.reload()" style="border-color: #ff4d4d; color: #ff4d4d; margin-top: 10px;">
-            <i class="fas fa-sign-out-alt icon-left"></i><span>ĐĂNG XUẤT</span>
-        </button>
-    </div>
-
-    <div class="container" id="emote-ui">
-        <span class="back-link" onclick="backToDashboard()"><i class="fas fa-arrow-left"></i> TRỞ VỀ</span>
-        <h2 id="server-title">VIETNAM SERVER</h2>
-        <div class="tet-countdown" id="tet-main">🧧 ĐANG CẬP NHẬT...</div>
-        <select id="serverSelect" onchange="updateServer()">
-            <option value="VN">Server Việt Nam (VN)</option>
-            <option value="IN">Server India (IND)</option>
-            <option value="ID">Server Indonesia (INDO)</option>
-            <option value="NA">Server North America (NA)</option>
-        </select>
-        <select id="musicSelect" onchange="changeMusic()">
-            <option value="https://files.catbox.moe/mmkn6r.mp3">🔥 Air Remix </option>
-            <option value="https://files.catbox.moe/9nodnl.mp3">🎵 Nhạc 2</option>
-        </select>
-        <input id="tc" placeholder="NHẬP TEAM CODE">
-        <div class="grid-uids">
-            <input id="uid1" placeholder="UID 1">
-            <input id="uid2" placeholder="UID 2">
-            <input id="uid3" placeholder="UID 3">
-            <input id="uid4" placeholder="UID 4">
+    <div id="paymentModal" class="fixed inset-0 bg-black/95 hidden z-[200] flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="glass-morphism w-full max-w-md p-8 rounded-[2.5rem] border-blue-500/30 border text-center">
+            <h2 id="modalTitle" class="text-2xl font-gaming font-bold mb-4 text-blue-400 uppercase italic">Thanh toán</h2>
+            <div id="productName" class="text-gray-200 mb-6 bg-white/5 p-4 rounded-xl border border-white/10 font-bold"></div>
+            <input type="number" id="uidField" placeholder="Nhập UID Game..." class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white mb-4">
+            <div id="productPrice" class="text-3xl font-bold italic mb-6"></div>
+            <button id="mainBtn" onclick="processOrder()" class="w-full py-5 rounded-2xl font-bold transition shadow-xl uppercase"></button>
+            <button onclick="closeModal()" class="w-full py-2 text-gray-500 text-xs mt-2">Hủy bỏ</button>
         </div>
-        <input id="uid5" placeholder="UID 5" style="width: 100%;">
-        <button class="btn-activate" onclick="startRandom()">BẮT ĐẦU BOT</button>
-        <div class="status-grid">
-            <div class="status-item" id="st">CHỜ...</div>
-            <div class="status-item" id="wp">SÚNG: TRỐNG</div>
-        </div>
-        <div id="time-main" style="margin-top: 15px; font-size: 12px; color: #ff007a; font-weight: bold;">KEY CÒN LẠI: 24:00:00</div>
     </div>
 
-    <div class="container" id="tcp-ui">
-        <span class="back-link" onclick="backToDashboard()"><i class="fas fa-arrow-left"></i> TRỞ VỀ</span>
-        <h2>TCP MENU</h2>
-        <input placeholder="NHẬP IP/PORT">
-        <button class="btn-activate">KÍCH HOẠT TCP</button>
-    </div>
-    <div class="container" id="team5-ui">
-        <span class="back-link" onclick="backToDashboard()"><i class="fas fa-arrow-left"></i> TRỞ VỀ</span>
-        <h2>TEAM 5 MENU</h2>
-        <input placeholder="ID PHÒNG">
-        <button class="btn-activate">AUTO TEAM 5</button>
-    </div>
-    <div class="container" id="lag-ui">
-        <span class="back-link" onclick="backToDashboard()"><i class="fas fa-arrow-left"></i> TRỞ VỀ</span>
-        <h2>LAG MENU</h2>
-        <input placeholder="TOKEN LAG">
-        <button class="btn-activate">BẮT ĐẦU LAG</button>
-    </div>
-
-    <div class="music-toggle" onclick="toggleMusic()" id="mBtn">🎵</div>
-    <audio id="bgMusic" loop></audio>
-
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        particlesJS("particles-js", {"particles":{"number":{"value":60},"color":{"value":"#00f2ff"},"shape":{"type":"circle"},"opacity":{"value":0.4},"size":{"value":2},"line_linked":{"enable":true,"distance":150,"color":"#00f2ff","opacity":0.2,"width":1},"move":{"enable":true,"speed":1.5}}});
+        let isLoggedIn = false;
+        let selectedAvatarUrl = "";
 
-        // Hẹn giờ Tết
-        function initTetTimer() {
-            const TET_DATE = new Date("Jan 29, 2026 00:00:00").getTime(); 
-            setInterval(() => {
-                let diff = TET_DATE - Date.now();
-                let d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
-                let text = diff <= 0 ? "🧧 CHÚC MỪNG NĂM MỚI! 🧧" : `🧧 CÒN ${d}N ${h}H ${m}P ${s}S ĐẾN TẾT`;
-                document.getElementById("tet-login").innerText = text;
-                if(document.getElementById("tet-main")) document.getElementById("tet-main").innerText = text;
-            }, 1000);
-        }
-        initTetTimer();
+        window.onload = function() {
+            const savedName = localStorage.getItem('ff_user_name');
+            const savedAvatar = localStorage.getItem('ff_user_avatar');
+            if (savedName && savedAvatar) {
+                renderUserUI(savedName, savedAvatar);
+                isLoggedIn = true;
+            }
+        };
 
-        // Key Timer
-        const EXPIRY_KEY = "emote_bot_expiry_timestamp";
-        function startTimer() {
-            let expiry = localStorage.getItem(EXPIRY_KEY) || (Date.now() + 86400000);
-            localStorage.setItem(EXPIRY_KEY, expiry);
-            setInterval(() => {
-                let diff = expiry - Date.now();
-                if(diff < 0) diff = 0;
-                let h = Math.floor(diff / 3600000).toString().padStart(2,'0'), m = Math.floor((diff % 3600000) / 60000).toString().padStart(2,'0'), s = Math.floor((diff % 60000) / 1000).toString().padStart(2,'0');
-                let format = `${h}:${m}:${s}`;
-                document.getElementById("time-login").innerText = format;
-                if(document.getElementById("time-main")) document.getElementById("time-main").innerText = "KEY CÒN LẠI: " + format;
-            }, 1000);
-        }
-        startTimer();
-
-        function login() {
-            if(document.getElementById("passInput").value === "123") {
-                document.getElementById("login-screen").style.display = "none";
-                document.getElementById("dashboard").style.display = "block";
-                if(!isPlaying) toggleMusic();
-            } else { alert("Mật khẩu sai!"); }
+        function selectAvatar(element) {
+            document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('avatar-selected'));
+            element.classList.add('avatar-selected');
+            selectedAvatarUrl = element.src;
         }
 
-        function openTool(id) { document.getElementById("dashboard").style.display = "none"; document.getElementById(id).style.display = "block"; }
-        function backToDashboard() { 
-            ['tcp-ui', 'emote-ui', 'team5-ui', 'lag-ui'].forEach(id => document.getElementById(id).style.display = "none");
-            document.getElementById("dashboard").style.display = "block"; 
+        function handleAction(name, price, isFree) {
+            if (!isLoggedIn) { toggleLoginModal(true); } 
+            else { orderNow(name, price, isFree); }
         }
 
-        // Nhạc nền
-        const audio = document.getElementById("bgMusic");
-        let isPlaying = false;
-        function toggleMusic() {
-            if(!audio.src) audio.src = document.getElementById("musicSelect").value;
-            if(isPlaying) { audio.pause(); document.getElementById("mBtn").innerText = "🔇"; } 
-            else { audio.play(); document.getElementById("mBtn").innerText = "🎵"; }
-            isPlaying = !isPlaying;
+        function requireLogin(e) { if (!isLoggedIn) { e.preventDefault(); toggleLoginModal(true); } }
+        function toggleLoginModal(show) { document.getElementById('loginModal').classList.toggle('hidden', !show); }
+
+        function doLogin(e) {
+            e.preventDefault();
+            const name = document.getElementById('usernameInput').value;
+            if(!selectedAvatarUrl) { alert("Vui lòng chọn một Avatar!"); return; }
+            localStorage.setItem('ff_user_name', name);
+            localStorage.setItem('ff_user_avatar', selectedAvatarUrl);
+            renderUserUI(name, selectedAvatarUrl);
+            isLoggedIn = true;
+            toggleLoginModal(false);
         }
-        function changeMusic() { audio.src = document.getElementById("musicSelect").value; if(isPlaying) audio.play(); }
 
-        function updateServer() { document.getElementById("server-title").innerText = document.getElementById("serverSelect").options[document.getElementById("serverSelect").selectedIndex].text.toUpperCase(); }
-
-        // --- LOGIC BOT CHÍNH ---
-        const emotes = [
-            {id:"909000063", name:"AK RỒNG"}, {id:"909000068", name:"SCAR MẬP"}, {id:"909000075", name:"MP40 XÀ 1"},
-            {id:"909040010", name:"MP40 XÀ 2"}, {id:"909000081", name:"M1014 LONG 1"}, {id:"909039011", name:"M1014 LONG 2"},
-            {id:"909000085", name:"XM8"}, {id:"909000090", name:"FAMAS"}, {id:"909000098", name:"UMP"},
-            {id:"909035007", name:"M1887"}, {id:"909042008", name:"WOODPECKER"}, {id:"909041005", name:"GROZA"},
-            {id:"909033001", name:"M4A1"}, {id:"909038010", name:"THOMPSON"}, {id:"909038012", name:"G18"},
-            {id:"909045001", name:"PARAFAL"}, {id:"909049010", name:"P90"}, {id:"909051003", name:"M60"}
-        ];
-
-        function startRandom() {
-            const tc = document.getElementById("tc").value;
-            const u1 = document.getElementById("uid1").value.trim();
-            const u2 = document.getElementById("uid2").value.trim();
-            const u3 = document.getElementById("uid3").value.trim();
-            const u4 = document.getElementById("uid4").value.trim();
-            const u5 = document.getElementById("uid5").value.trim();
-
-            if(!tc || !u1) return alert("Vui lòng nhập Team Code và ít nhất UID 1!");
-
-            document.getElementById("st").innerText = "ĐANG CHẠY...";
-            let index = 0;
-
-            const loop = setInterval(() => {
-                if(index >= emotes.length) {
-                    clearInterval(loop);
-                    document.getElementById("st").innerText = "XONG!";
-                    document.getElementById("wp").innerText = "HOÀN THÀNH";
-                    return;
-                }
-
-                const currentEmote = emotes[index];
-                document.getElementById("wp").innerText = "SÚNG: " + currentEmote.name;
-
-                // API với 5 UID và 1 Team Code, chạy mỗi 5 giây
-                const apiUrl = `https://siiyfcc.onrender.com/join?tc=${tc}&uid1=${u1}&uid2=${u2}&uid3=${u3}&uid4=${u4}&uid5=${u5}&uid6=&emote_id=${currentEmote.id}`;
-                
-                fetch(apiUrl)
-                    .then(res => console.log(`Sent ${currentEmote.name}`))
-                    .catch(err => console.error("Lỗi gửi API"));
-
-                index++;
-            }, 5000); // Khoảng cách 5 giây mỗi emote
-        }
-    </script>
-</body>
-</html>
+        function renderUserUI(name, avatar) {
+            document.getElementById('userContainer').innerHTML = `
+                <div class="flex items-center gap-3 bg-white/5 px-4 py-1 rounded-full border border-cyan-500/30">
+                 
