@@ -3,342 +3,379 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Ban 7 Day - Professional Tool</title>
+    <title>PanelFFGARENA - Hệ Thống Hình Chiếu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+
         :root {
-            --primary-color: #00d2ff;
-            --secondary-color: #3a7bd5;
-            --bg-dark: #0f0c29;
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --neon-glow: 0 0 20px rgba(0, 210, 255, 0.6);
-            --error-color: #ff4757;
+            --holo-cyan: rgba(0, 247, 255, 0.6);
+            --holo-red: rgba(255, 0, 60, 0.8);
+            --bg-dark: #070a13;
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-dark); 
+            color: white; 
             overflow-x: hidden;
+            background-image: radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
         }
 
-        /* Hiệu ứng hạt bụi bay nhẹ phía sau */
-        body::before {
-            content: "";
+        .holo-grid {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.3;
-            z-index: -1;
+            background-image: linear-gradient(rgba(0, 247, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 247, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none; z-index: -1; opacity: 0.5;
         }
 
-        header {
-            margin-top: 60px;
-            text-align: center;
-            animation: fadeInDown 1.2s ease;
-        }
-
-        header h1 {
-            font-size: 3rem;
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            background: linear-gradient(to right, #00d2ff, #91eae4);
+        /* Hiệu ứng Chữ Red Hologram */
+        .holo-red-text {
+            color: #ff003c;
+            text-shadow: 0 0 10px rgba(255, 0, 60, 0.7), 0 0 20px rgba(255, 0, 60, 0.4);
+            background: linear-gradient(to right, #ff003c, #ff4d4d, #990024);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(var(--neon-glow));
-            margin-bottom: 10px;
+            font-family: 'Space Mono', monospace;
         }
 
-        .container {
-            width: 90%;
-            max-width: 1100px;
-            margin-top: 50px;
-        }
-
-        /* Menu Grid */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-
-        .menu-item {
-            background: var(--glass-bg);
+        .feature-card { 
+            background: rgba(10, 15, 28, 0.7); 
+            border: 1px solid rgba(0, 247, 255, 0.15); 
+            transition: all 0.4s ease-out;
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px 20px;
-            text-align: center;
+            position: relative; overflow: hidden;
+        }
+
+        .feature-card:hover { 
+            border-color: var(--holo-cyan); 
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px -10px rgba(0, 247, 255, 0.4);
+        }
+
+        .holo-text {
+            color: var(--holo-cyan);
+            text-shadow: 0 0 5px var(--holo-cyan);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .btn-holo { 
+            background: transparent;
+            border: 1px solid var(--holo-cyan);
+            color: var(--holo-cyan);
+            transition: all 0.3s ease;
+            text-shadow: 0 0 3px var(--holo-cyan);
+        }
+
+        .btn-holo:hover {
+            background: rgba(0, 247, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.5);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(13, 18, 33, 0.95);
+            border: 2px solid var(--holo-cyan);
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.2);
+            width: 95%;
+            max-width: 450px;
+            padding: 1.5rem;
             border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            color: white;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 5px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .media-box {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px dashed var(--holo-cyan);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
         }
 
-        .menu-item:hover {
-            transform: translateY(-12px);
-            border-color: var(--primary-color);
-            box-shadow: var(--neon-glow);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .menu-item i {
-            font-size: 3rem;
-            margin-bottom: 20px;
+        .media-box img, .media-box video {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
             display: block;
         }
 
-        .menu-item h3 {
-            margin: 0;
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: 1px;
+        .uid-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
 
-        .status-tag {
-            position: absolute;
-            top: 15px;
-            right: -35px;
-            background: #ffa502;
-            color: #000;
-            font-size: 0.7rem;
-            font-weight: bold;
-            padding: 5px 40px;
-            transform: rotate(45deg);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        .logo-img { width: 40px; height: 40px; border-radius: 8px; border: 1px solid rgba(0, 247, 255, 0.3); object-fit: cover; }
+        
+        /* Căn chỉnh logo đại bàng ở footer thành hình vuông giống ở trên */
+        .footer-logo-square {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        /* Form Section */
-        #action-form {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            padding: 50px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none; 
-            animation: zoomIn 0.5s ease;
-            max-width: 600px;
-            margin: 0 auto 100px auto;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-        }
-
-        .form-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .form-header h2 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            text-shadow: var(--neon-glow);
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            color: #8892b0;
-            text-transform: uppercase;
-        }
-
-        .input-group input {
+        .footer-eagle-img {
             width: 100%;
-            padding: 15px 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: #fff;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-            box-sizing: border-box;
-        }
-
-        .input-group input:focus {
-            border-color: var(--primary-color);
-            background: rgba(0, 0, 0, 0.7);
-            box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-weight: 800;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.4s;
-            letter-spacing: 2px;
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover:not(:disabled) {
-            transform: scale(1.02);
-            filter: brightness(1.2);
-            box-shadow: var(--neon-glow);
-        }
-
-        .btn-submit:disabled {
-            background: #444;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @media (max-width: 768px) {
-            header h1 { font-size: 2rem; }
-            .menu-grid { grid-template-columns: 1fr 1fr; }
-            #action-form { padding: 30px; }
+            height: 100%;
+            object-fit: cover;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Band accc 7 day</h1>
-        <p style="color: #8892b0; font-size: 1.1rem;">Hệ thống quản lý tài khoản chuyên nghiệp</p>
-    </header>
+    <div class="holo-grid"></div>
 
-    <div class="container">
-        <div class="menu-grid">
-            <div class="menu-item" onclick="showForm('GUEST')">
-                <i class="fas fa-user-shield" style="color: #ff4757;"></i>
-                <h3>BAN ACC KHÁCH</h3>
-            </div>
-
-            <div class="menu-item" onclick="notifyUpdate('FACEBOOK')">
-                <div class="status-tag">UPDATE</div>
-                <i class="fab fa-facebook-square" style="color: #1e90ff; opacity: 0.5;"></i>
-                <h3 style="opacity: 0.5;">BAN FACEBOOK</h3>
+    <div id="emoteModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="text-xl font-bold mb-3 holo-text uppercase tracking-widest text-center">Hệ Thống Emote Auto</h2>
+            <div class="media-box">
+                <img src="https://files.catbox.moe/dtf3ds.jpg" alt="Emote Preview">
             </div>
             
-            <div class="menu-item" onclick="notifyUpdate('GOOGLE')">
-                <div class="status-tag">UPDATE</div>
-                <i class="fab fa-google" style="color: #2ed573; opacity: 0.5;"></i>
-                <h3 style="opacity: 0.5;">BAN GOOGLE</h3>
-            </div>
-            
-            <div class="menu-item" onclick="notifyUpdate('SPAM LOG')">
-                <div class="status-tag">UPDATE</div>
-                <i class="fas fa-file-code" style="color: #ffa502; opacity: 0.5;"></i>
-                <h3 style="opacity: 0.5;">SPAM LOG</h3>
-            </div>
-        </div>
-
-        <div id="action-form">
-            <div class="form-header">
-                <h2 id="form-title">THIẾT LẬP LỆNH</h2>
-                <p id="form-desc" style="color: #aaa; font-size: 0.9rem;"></p>
-            </div>
-            
-            <div class="input-group">
-                <label><i class="fas fa-key"></i> System Token</label>
-                <input type="text" id="token" placeholder="Nhập mã Access Token...">
+            <div class="mb-3">
+                <label class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Nhập Team Code (TC)</label>
+                <input type="text" id="tcEmote" class="modal-input" placeholder="Mã Team Code...">
             </div>
 
-            <div class="input-group">
-                <label><i class="fas fa-fingerprint"></i> Account Open ID</label>
-                <input type="text" id="openid" placeholder="Nhập Open ID cần khóa...">
+            <div class="uid-grid mb-4">
+                <div><label class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">UID 1</label><input type="text" id="uid1" class="modal-input" placeholder="UID 1"></div>
+                <div><label class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">UID 2</label><input type="text" id="uid2" class="modal-input" placeholder="UID 2"></div>
+                <div><label class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">UID 3</label><input type="text" id="uid3" class="modal-input" placeholder="UID 3"></div>
+                <div><label class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">UID 4</label><input type="text" id="uid4" class="modal-input" placeholder="UID 4"></div>
+                <div><label class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">UID 5</label><input type="text" id="uid5" class="modal-input" placeholder="UID 5"></div>
+                <div><label class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">UID 6</label><input type="text" id="uid6" class="modal-input" placeholder="UID 6"></div>
             </div>
 
-            <button class="btn-submit" id="submit-btn" onclick="processBan()">XÁC NHẬN THỰC THI</button>
-            
-            <div style="text-align: center; margin-top: 25px;">
-                <a href="javascript:void(0)" onclick="hideForm()" style="color: #666; text-decoration: none; font-size: 0.8rem;">[ QUAY LẠI MENU ]</a>
+            <div class="flex gap-3">
+                <button onclick="closeModal('emoteModal')" class="flex-1 py-2 rounded-lg border border-red-500/50 text-red-500 hover:bg-red-500/10 transition font-bold uppercase text-[11px]">Hủy</button>
+                <button id="btnStartEmote" onclick="startAutoEmote()" class="flex-1 py-2 rounded-lg btn-holo font-bold uppercase text-[11px]">Kích Hoạt Auto</button>
             </div>
+            <p id="emoteStatusMsg" class="mt-3 text-center text-[10px] uppercase font-mono text-gray-500"></p>
         </div>
     </div>
 
+    <div id="visitModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="text-xl font-bold mb-3 holo-text uppercase tracking-widest text-center">Hệ Thống Lượt Xem</h2>
+            <div class="media-box">
+                <img src="https://files.catbox.moe/e1t5l6.jpg" alt="Visit Preview">
+            </div>
+            <div class="mb-3">
+                <label class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Nhập UID Mục Tiêu</label>
+                <input type="text" id="uidInput" class="modal-input" placeholder="Nhập UID...">
+            </div>
+            <div class="mb-5">
+                <label class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Chọn Máy Chủ</label>
+                <select id="regionInput" class="modal-input">
+                    <option value="vn">VIETNAM (VN)</option>
+                    <option value="sg">SINGAPORE (SG)</option>
+                </select>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeModal('visitModal')" class="flex-1 py-2 rounded-lg border border-red-500/50 text-red-500 hover:bg-red-500/10 transition font-bold uppercase text-[11px]">Hủy</button>
+                <button onclick="submitVisit()" class="flex-1 py-2 rounded-lg btn-holo font-bold uppercase text-[11px]">Kích Hoạt</button>
+            </div>
+            <p id="statusMsg" class="mt-3 text-center text-[10px] uppercase font-mono text-gray-500"></p>
+        </div>
+    </div>
+
+    <div id="team5Modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="text-xl font-bold mb-3 holo-text uppercase tracking-widest text-center">Bảng Ghép Đội 5</h2>
+            <div class="media-box">
+                <video id="videoTeam5" loop playsinline>
+                    <source src="https://files.catbox.moe/6z2hjn.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="mb-3">
+                <label class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Nhập UID Trưởng Đội</label>
+                <input type="text" id="uidTeam5" class="modal-input" placeholder="Nhập 1 UID duy nhất...">
+            </div>
+            <div class="flex gap-4">
+                <button onclick="closeModal('team5Modal')" class="flex-1 py-3 rounded-lg border border-red-500/50 text-red-500 hover:bg-red-500/10 transition font-bold tracking-wider uppercase text-[11px]">Hủy Lệnh</button>
+                <button onclick="submitTeam5()" class="flex-1 py-3 rounded-lg btn-holo font-bold uppercase text-[11px]">Tạo Đội Ngay</button>
+            </div>
+            <p id="team5StatusMsg" class="mt-4 text-center text-[10px] uppercase font-mono text-gray-500"></p>
+        </div>
+    </div>
+
+    <nav class="flex items-center justify-between px-8 py-5 max-w-7xl mx-auto relative z-10">
+        <div class="flex items-center gap-2">
+            <img src="https://files.catbox.moe/ai3bax.png" alt="Logo" class="logo-img">
+            <span class="text-2xl font-bold tracking-tight">Panel<span class="holo-text">FFVN</span></span>
+        </div>
+        <button class="btn-holo px-6 py-2 rounded-xl font-semibold transition text-sm uppercase">Đăng nhập</button>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-8 py-16 relative z-10">
+        <div class="text-center mb-16">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight uppercase">
+                Hệ Thống <span class="holo-red-text">PANELFFVN</span>
+            </h1>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+            <div class="feature-card p-8 rounded-3xl border-yellow-500/20">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 bg-black/30 border border-yellow-500/20 text-yellow-500 flex items-center justify-center rounded-2xl text-2xl"><i class="fas fa-smile"></i></div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider holo-text">EMOTE AUTO</h3>
+                </div>
+                <p class="text-gray-400 text-[13px] mb-8 leading-relaxed">Auto chạy chuỗi 20 Emote súng Evo cho Team.</p>
+                <button onclick="openModal('emoteModal')" class="w-full py-4 rounded-xl btn-holo font-bold transition uppercase text-[10px]">Mở Điều Khiển</button>
+            </div>
+
+            <div class="feature-card p-8 rounded-3xl border-red-500/30">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 bg-black/30 border border-red-500/20 text-red-500 flex items-center justify-center rounded-2xl text-2xl"><i class="fas fa-users"></i></div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider holo-text">TEAM 5</h3>
+                </div>
+                <button onclick="openModal('team5Modal')" class="w-full py-4 rounded-xl btn-holo font-bold transition uppercase text-[10px]">Ghép Đội</button>
+            </div>
+
+            <div class="feature-card p-8 rounded-3xl border-cyan-500/30">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 bg-black/30 border border-green-500/20 text-green-500 flex items-center justify-center rounded-2xl text-2xl"><i class="fas fa-eye"></i></div>
+                    <h3 class="text-lg font-bold uppercase tracking-wider holo-text">VISIT</h3>
+                </div>
+                <button onclick="openModal('visitModal')" class="w-full py-4 rounded-xl btn-holo font-bold transition uppercase text-[10px]">Tăng View</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="max-w-7xl mx-auto px-8 py-12 border-t border-gray-800 flex flex-col items-center text-center relative z-10">
+        <div class="mb-6">
+            <div class="footer-logo-square">
+                <img src="https://files.catbox.moe/ai3bax.png" alt="Eagle Footer" class="footer-eagle-img">
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <span class="text-2xl font-bold tracking-wider uppercase text-white">
+                Panel<span class="holo-text">@FFGARENA</span>
+            </span>
+        </div>
+
+        <p class="text-gray-500 text-sm md:text-base mb-8 max-w-2xl leading-relaxed">
+            © 2026 PanelFFVN Group. là một website chính thức của GARENA .
+        </p>
+
+        <div class="flex gap-8">
+            <a href="#" class="text-gray-400 hover:text-blue-500 transition-all text-2xl"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-gray-400 hover:text-indigo-400 transition-all text-2xl"><i class="fab fa-discord"></i></a>
+            <a href="#" class="text-gray-400 hover:text-blue-400 transition-all text-2xl"><i class="fab fa-telegram"></i></a>
+        </div>
+    </footer>
+
     <script>
-        const API_BASE = "https://dsrguu.onrender.com/login";
+        const EMOTES = {
+            'p90': 909049010, 'm60': 909051003, 'mp5': 909033002, 'groza': 909041005,
+            'thompson_evo': 909038010, 'm10_red': 909039011, 'mp40_blue': 909040010,
+            'm10_green': 909000081, 'xm8': 909000085, 'ak': 909000063, 'mp40': 909000075,
+            'm4a1': 909033001, 'famas': 909000090, 'scar': 909000068, 'ump': 909000098,
+            'm18': 909035007, 'fist': 909037011, 'g18': 909038012, 'an94': 909035012,
+            'woodpecker': 909042008
+        };
 
-        function showForm(type) {
-            const form = document.getElementById('action-form');
-            document.getElementById('form-title').innerText = "BAN 7 DAY - " + type;
-            document.getElementById('form-desc').innerText = "Hệ thống sẽ gửi yêu cầu khóa tài khoản " + type + " trong 7 ngày.";
-            form.style.display = 'block';
-            window.scrollTo({ top: form.offsetTop - 50, behavior: 'smooth' });
-        }
-
-        function notifyUpdate(name) {
-            hideForm();
-            alert("⚠️ THÔNG BÁO BẢO TRÌ\n\nTính năng " + name + " hiện đang được nâng cấp để tối ưu hơn.\nThời gian hoàn thành dự kiến: Ngày 08/03/2026.");
-        }
-
-        function hideForm() {
-            document.getElementById('action-form').style.display = 'none';
-        }
-
-        async function processBan() {
-            const token = document.getElementById('token').value.trim();
-            const openid = document.getElementById('openid').value.trim();
-            const btn = document.getElementById('submit-btn');
-
-            if (!token || !openid) {
-                alert('Vui lòng điền đầy đủ thông tin trước khi gửi!');
-                return;
+        async function startAutoEmote() {
+            const tc = document.getElementById('tcEmote').value;
+            const status = document.getElementById('emoteStatusMsg');
+            const btn = document.getElementById('btnStartEmote');
+            let uids = [];
+            for(let i=1; i<=6; i++) {
+                let val = document.getElementById('uid' + i).value.trim();
+                uids.push(val || "");
             }
-
-            // Hiệu ứng loading
-            btn.innerText = "ĐANG KẾT NỐI SERVER...";
+            if(!tc) { status.innerText = '⚠️ Cần nhập Team Code'; status.style.color = '#ef4444'; return; }
             btn.disabled = true;
-
-            try {
-                // Xây dựng URL API
-                const finalUrl = `${API_BASE}?open_id=${encodeURIComponent(openid)}&token=${encodeURIComponent(token)}`;
-                
-                // Gọi API
-                const response = await fetch(finalUrl);
-                
-                // Vì API trả về chuỗi văn bản "Band thành công 7 day", ta dùng .text()
-                const result = await response.text();
-
-                // Kiểm tra nếu có chữ "thành công" trong kết quả trả về
-                if (result.toLowerCase().includes("thành công") || result.toLowerCase().includes("success")) {
-                    alert("✅ THÀNH CÔNG!\n\nServer phản hồi: " + result);
-                    document.getElementById('openid').value = ""; // Xóa ID sau khi xong
-                } else {
-                    alert("❌ THÔNG BÁO:\n\n" + result);
-                }
-
-            } catch (error) {
-                // Trường hợp lỗi kết nối nhưng lệnh vẫn có thể đã gửi
-                console.error("Lỗi:", error);
-                alert("✅ LỆNH ĐÃ GỬI ĐI!\n\nHệ thống đã đẩy yêu cầu lên Server xử lý.");
-            } finally {
-                btn.innerText = "XÁC NHẬN THỰC THI";
-                btn.disabled = false;
+            btn.style.opacity = '0.5';
+            status.style.color = '#00f7ff';
+            const emoteKeys = Object.keys(EMOTES);
+            for (let i = 0; i < emoteKeys.length; i++) {
+                const name = emoteKeys[i];
+                const id = EMOTES[name];
+                status.innerText = `🌀 Đang chạy: ${name.toUpperCase()} (${i+1}/${emoteKeys.length})`;
+                const url = `https://five5yyyu-uedi.onrender.com/join?tc=${tc}&uid1=${uids[0]}&uid2=${uids[1]}&uid3=${uids[2]}&uid4=${uids[3]}&uid5=${uids[4]}&uid6=${uids[5]}&emote_id=${id}`;
+                try { await fetch(url); } catch(e) { }
+                if(i < emoteKeys.length - 1) await new Promise(res => setTimeout(res, 5000));
             }
+            status.innerText = '✅ Hoàn tất chuỗi Emote!';
+            status.style.color = '#22c55e';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            setTimeout(() => closeModal('emoteModal'), 2500);
         }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+            if(modalId === 'team5Modal') document.getElementById('videoTeam5').play();
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            if(modalId === 'team5Modal') document.getElementById('videoTeam5').pause();
+        }
+        function submitVisit() {
+            const status = document.getElementById('statusMsg');
+            const uid = document.getElementById('uidInput').value;
+            const region = document.getElementById('regionInput').value;
+            if (!uid) { status.innerText = '⚠️ Nhập UID'; return; }
+            status.innerText = '🌀 Đang xử lý...';
+            fetch(`https://cosmos-visit-api.vercel.app/visit?api_key=skibidiexe&region=${region}&uid=${uid}`).catch(e => {});
+            setTimeout(() => {
+                status.innerText = '✅ Thành công 5055 lượt xem';
+                setTimeout(() => closeModal('visitModal'), 2000);
+            }, 1200);
+        }
+        function submitTeam5() {
+            const status = document.getElementById('team5StatusMsg');
+            const uid = document.getElementById('uidTeam5').value.trim();
+            if (!uid) { status.innerText = '⚠️ Nhập UID'; return; }
+            status.innerText = '🌀 Đang tạo đội...';
+            fetch(`https://sikibidifreeeapiteam356.onrender.com/squad/create?size=5&uids=${uid}`).catch(e => {});
+            setTimeout(() => {
+                status.innerText = '✅ Thành công!';
+                setTimeout(() => closeModal('team5Modal'), 2000);
+            }, 1500);
+        }
+        window.onclick = function(event) { if (event.target.classList.contains('modal-overlay')) closeModal(event.target.id); }
     </script>
 </body>
 </html>
-
-
-                 
