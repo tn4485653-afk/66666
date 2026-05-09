@@ -3,191 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANELFFVN - ALWAYS SUCCESS</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+    <title>m4 status - Mobile Interface</title>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --hologram-gradient: linear-gradient(
+                135deg,
+                #ff0080,
+                #7928ca,
+                #0070f3,
+                #00dfd8,
+                #ff0080
+            );
+
+            --bg-dark: #0b0e14;
+            --text-light: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+
+            display: flex;
+            flex-direction: column;
+
+            min-height: 100vh;
+            overflow-x: hidden;
+
+            padding-bottom: 50px;
+        }
+
+        nav {
+            width: 100%;
+            padding: 20px;
+
             display: flex;
             justify-content: center;
-            align-items: center;
-            background: #05050a;
-            overflow: hidden;
-            position: relative;
-        }
 
-        /* Nền vũ trụ động */
-        .stars-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
-            z-index: -1;
-        }
-
-        .nebula {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(255, 0, 255, 0.1) 0%, transparent 70%);
-            top: -100px;
-            left: -100px;
-            filter: blur(50px);
-            animation: move 20s infinite alternate;
-        }
-
-        @keyframes move {
-            from { transform: translate(0, 0); }
-            to { transform: translate(100px, 100px); }
-        }
-
-        /* Khung Panel */
-        .container {
-            position: relative;
-            z-index: 10;
-            width: 360px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 50px 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            box-shadow: 0 0 40px rgba(0,0,0,0.7);
-        }
-
-        h1 {
-            color: #ff00ff;
-            font-size: 38px;
-            font-weight: 900;
-            text-shadow: 0 0 20px #ff00ff;
-            margin-bottom: 40px;
-            letter-spacing: 2px;
-        }
-
-        .label {
-            color: #00d2ff;
-            font-size: 11px;
-            font-weight: 800;
-            text-align: left;
-            margin: 0 0 10px 5px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(0, 210, 255, 0.2);
-            border-radius: 12px;
-            padding: 16px;
-            color: #fff;
-            font-size: 15px;
-            margin-bottom: 30px;
-            outline: none;
-            text-align: center;
-        }
-
-        button {
-            width: 100%;
-            background: transparent;
-            border: 2px solid #00d2ff;
-            border-radius: 12px;
-            padding: 16px;
-            color: #00d2ff;
-            font-weight: 900;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-
-        button:hover {
-            background: #00d2ff;
-            color: #000;
-            box-shadow: 0 0 25px #00d2ff;
-        }
-
-        /* Toast thông báo trượt */
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: -400px;
-            width: 300px;
-            background: rgba(10, 10, 20, 0.95);
+            background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
-            border-left: 5px solid #00ff00;
-            padding: 20px;
-            border-radius: 10px;
-            color: white;
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+            position: fixed;
+            top: 0;
             z-index: 1000;
         }
 
-        .toast.active { right: 20px; }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
 
-        .toast-header { color: #00ff00; font-weight: 900; font-size: 14px; margin-bottom: 5px; }
-        .toast-body { font-size: 12px; opacity: 0.8; }
+            background: var(--hologram-gradient);
+            background-size: 400% 400%;
 
-        .footer { margin-top: 40px; color: rgba(255, 255, 255, 0.2); font-size: 10px; letter-spacing: 4px; }
-    </style>
-</head>
-<body>
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
 
-    <div class="stars-bg"></div>
-    <div class="nebula"></div>
+            animation: hologram-shift 5s ease infinite;
+        }
 
-    <div class="toast" id="toast">
-        <div class="toast-header">THÀNH CÔNG</div>
-        <div class="toast-body" id="toastMsg">Đã gửi lệnh Lag tới mục tiêu.</div>
-    </div>
+        .container {
+            flex: 1;
 
-    <div class="container">
-        <h1>PANELFFVN</h1>
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 
-        <div class="label">TARGET UID</div>
-        <input type="text" id="uid" placeholder="Nhập UID đối thủ...">
+            padding: 20px;
+            text-align: center;
 
-        <button onclick="run()">KÍCH HOẠT LAG</button>
+            margin-top: 80px;
+        }
 
-        <div class="footer">DESIGNED BY SIKIBIDI</div>
-    </div>
+        .brand-name {
+            font-size: 3.5rem;
+            font-weight: 900;
 
-    <script>
-        function run() {
-            const uidInput = document.getElementById('uid');
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMsg');
-            const btn = document.querySelector('button');
+            text-transform: uppercase;
+            line-height: 1;
 
-            if(!uidInput.value) {
-                alert("Nhập UID đã ông giáo!");
-                return;
+            margin-bottom: 15px;
+
+            background: var(--hologram-gradient);
+            background-size: 400% 400%;
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            animation: hologram-shift 5s ease infinite;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+
+            text-transform: uppercase;
+            letter-spacing: 3px;
+
+            margin-bottom: 40px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+
+            gap: 15px;
+
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 16px 25px;
+
+            border-radius: 15px;
+
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+
+            transition: all 0.3s ease;
+
+            width: 100%;
+        }
+
+        /* Discord */
+        .btn-discord {
+            background: #5865F2;
+            color: white;
+
+            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.3);
+        }
+
+        .btn-discord i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Start */
+        .btn-start {
+            background: var(--hologram-gradient);
+            background-size: 200% 200%;
+
+            color: white;
+
+            animation: hologram-shift 3s linear infinite;
+
+            box-shadow: 0 5px 15px rgba(121, 40, 202, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .glow-sphere {
+            position: fixed;
+
+            width: 250px;
+            height: 250px;
+
+            background: var(--hologram-gradient);
+
+            filter: blur(120px);
+            opacity: 0.15;
+
+            z-index: -1;
+            border-radius: 50%;
+
+            top: 30%;
+        }
+
+        @keyframes hologram-shift {
+            0% {
+                background-position: 0% 50%;
             }
 
-            // Hiệu ứng chạy giả
-            btn.innerText = "ĐANG XỬ LÝ API...";
-            btn.style.pointerEvents = "none";
+            50% {
+                background-position: 100% 50%;
+            }
 
-            // Vẫn gọi API để server chạy ngầm
-            fetch(`https://m4devtrollllag.onrender.com/lag?uid=${uidInput.value}`).catch(() => {});
-
-            // Luôn hiện thành công sau 1.5 giây
-            setTimeout(() => {
-                btn.innerText = "KÍCH HOẠT LAG";
-                btn.style.pointerEvents = "auto";
-                
-                toastMsg.innerText = `Đã kích hoạt gói tin Lag thành công cho UID: ${uidInput.value}`;
-                toast.classList.add('active');
-
-                // Tự đóng thông báo
-                setTimeout(() => toast.classList.remove('active'), 4000);
-                
-                uidInput.value = "";
-            }, 1500);
+            100% {
+                background-position: 0% 50%;
+            }
         }
-    </script>
+
+        @media (min-width: 600px) {
+            .button-group {
+                flex-direction: row;
+                max-width: 500px;
+            }
+
+            .brand-name {
+                font-size: 5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="glow-sphere"></div>
+
+    <nav>
+        <div class="logo">M4</div>
+    </nav>
+
+    <div class="container">
+
+        <h1 class="brand-name">m4 status</h1>
+
+        <p class="tagline">
+            Tham gia Server discord - tất cả free không mất phí
+        </p>
+
+        <div class="button-group">
+
+            <!-- Discord -->
+            <a href="https://discord.gg/G33hddEgW"
+               target="_blank"
+               class="btn btn-discord">
+
+                <i class="fa-brands fa-discord"></i>
+                Discord Server
+
+            </a>
+
+            <!-- Start -->
+            <a href="https://code-web-t4ga.onrender.com/"
+               class="btn btn-start">
+
+                Bắt Đầu vào Menu
+
+            </a>
+
+        </div>
+    </div>
+
 </body>
 </html>
